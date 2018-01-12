@@ -1,4 +1,4 @@
-import static java.lang.System.out;
+// import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,10 +13,10 @@ public class Connect {
 	static String passwd = "root";
 	
 	
-	public static void main(String[] args) {
-		out.print("debut programme\n");
-		lireEnBase();
-	}
+	// public static void main(String[] args) {
+	//	out.print("debut programme\n");
+	//	lireEnBase();
+	// }
 	
 	public static void sauverEnBase(String personne) {
 
