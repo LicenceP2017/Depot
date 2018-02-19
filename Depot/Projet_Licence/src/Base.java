@@ -11,39 +11,42 @@ public void ConnexionBD()
 {
 try
 {
-Class.forName("com.mysql.cj.jdbc.Driver");
+	Class.forName("com.mysql.jdbc.Driver");
 }
 catch(Exception ex)
 { 
-System.out.print("Erreur de Chargement");
-System.exit(0);
+	System.out.print("Erreur de Chargement");
+	System.exit(0);
 }
 try
 {
-String url = "jdbc:mysql://localhost/TP1?autoReconnect=true&useSSL=false";
-String user = "root";
-String passwd = "root";
-																					out.println("Ca fonctionne");
-conn = DriverManager.getConnection(url, user, passwd);
+	String url = "jdbc:mysql://localhost/projetlicence?useSSL=false";
+	String user = "root";
+	String passwd = "root";
+																					
+	
+	conn = DriverManager.getConnection(url, user, passwd);
+	out.println("Ca fonctionne");
 }
 catch(Exception ex)
 {
-System.out.print("Erreur de connexion à la BD");
+	System.out.println("Erreur de connexion à la BD");
+	ex.printStackTrace();
 }
 }
 
 public Connection getConnect()
 {
-return conn;
+	return conn;
 }
 
 public void DeconnexionBD()
 {
-try {
-conn.close();
-}
-catch(Exception ex) {
-System.out.print("Déconnexion impossible");
-}
+	try {
+		conn.close();
+	}
+	catch(Exception ex) {
+		System.out.print("D�connexion impossible");
+	}
 }
 }

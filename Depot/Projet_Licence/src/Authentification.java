@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 
 class Authentification implements ActionListener {
 												
-//Objet pour se connecter à la base de données
+//Objet pour se connecter à la base de donn�es
 public Base b = new Base();
 public Connection conn;
 private InterfaceConnexion IC;
@@ -39,25 +39,20 @@ public void actionPerformed(ActionEvent ae)
 
 //Manipulation
 try {
-//Création de la requête
-statement = conn.prepareStatement("SELECT Nom_Client FROM Client WHERE Prenom_Client ='"+login+"'");
-																					System.out.println(statement); //à supprimer
+//Cr�ation de la requ�te
+	statement = conn.prepareStatement("SELECT nom_utilisateur, prenom_utilisateur FROM utilisateurs WHERE login_utilisateur = '"+login+"' And mdp_utilisateur ='"+password+"'");
+																					
+	System.out.println(statement); //à supprimer
 
-resultat = statement.executeQuery();
+																					
+	resultat = statement.executeQuery();
 
 if(resultat.next())
 {
-String motDePasse = resultat.getString(1);
-if(motDePasse.equals(password))
-{
-JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.PLAIN_MESSAGE);
+JOptionPane.showMessageDialog(null,"Connexion r�ussie ! ","Success",JOptionPane.PLAIN_MESSAGE);
 }
 else {
-JOptionPane.showMessageDialog(null,"Mot de passe incorrect ! ","Error",1);
-}
-}
-else {
-JOptionPane.showMessageDialog(null,"Login incorrect ! ","Error",1);
+JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 }
 
 //Récupération de la requête dans une variable
