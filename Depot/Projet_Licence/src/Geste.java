@@ -1,3 +1,8 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Geste {
 
@@ -9,12 +14,118 @@ public class Geste {
 	String explication;
 	int difficulte;
 	String valeur;
+	int idvideo;
+	ArrayList<String> motCle;
+	ArrayList<String> images;
+	ArrayList<String> categories;
 	
 	
-	public Geste()
+	ArrayList<String> listeNomGeste = new ArrayList<>();
+	Geste ungeste;
+	
+	
+	
+	public Base b = new Base();
+	public Connection conn;
+    PreparedStatement statement = null;	//Objet PreparedStatement
+    ResultSet resultat = null;     //Objet ResultSet
+	
+    
+    private void nouvelleConnexion(String sql) throws SQLException // creer la connexion base et execute la requete passé en paramètre
+    {
+    	b.ConnexionBD();
+        conn = b.getConnect();
+		statement = conn.prepareStatement(sql);
+		
+		System.out.println(statement); //à  supprimer
+		
+		//resultat = statement.executeQuery();    ne fonctionne que sur les requetes sql contenant un Select
+		
+    }
+	
+	public Geste()	{	}
+	public Geste(int id, String nom, String av, String in, String ex, int dif, String val, int vi) {
+		idGeste = id;
+		nomGeste = nom;
+		avantage = av;
+		inconvenient = in;
+		explication = ex;
+		difficulte = dif;
+		valeur = val;
+		idvideo = vi;
+		motCle = new ArrayList<>();
+		images = new ArrayList<>();
+		categories = new ArrayList<>();
+	}
+	
+	
+	
+	
+	public void getNomGeste() throws SQLException // permet de charger la liste des nom des geste pour la liste déroulante
 	{
 		
+		nouvelleConnexion("SELECT nom_geste FROM geste_technique");
+		resultat = statement.executeQuery();
 		
+		while(resultat.next()){ 
+			String nom = resultat.getString("nom_geste");
+			listeNomGeste.add(nom);
+		}
+		
+		System.out.println(listeNomGeste); //à  supprimer
+	}
+	
+	
+	
+	public void recupGeste(String nomGeste) throws SQLException // permet de récupérer un geste pour l'affichage 
+	{
+		nouvelleConnexion("SELECT * FROM geste_technique WHERE nom_geste = '"+nomGeste+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			ungeste = new Geste(
+					resultat.getInt("id_geste")
+					,resultat.getString("nom_geste")
+					,resultat.getString("avantage")
+					,resultat.getString("inconvenient")
+					,resultat.getString("explication")
+					,resultat.getInt("niveau_difficulte")
+					,resultat.getString("valeur")
+					,resultat.getInt("id_video"));
+			
+			
+		}
+		
+		System.out.println(ungeste.idGeste);
+		System.out.println(ungeste.nomGeste);
+		System.out.println(ungeste.avantage);
+		System.out.println(ungeste.inconvenient);
+		System.out.println(ungeste.explication);
+		System.out.println(ungeste.difficulte);
+		System.out.println(ungeste.valeur);
+		System.out.println(ungeste.idvideo);
+		
+	}
+	
+	public void modifGeste() throws SQLException // permet de modifier un geste dans la base
+	{
+		nouvelleConnexion("UPDATE geste_technique SET nom_geste = '"+ungeste.nomGeste
+				+"', avantage = '"+ungeste.avantage
+				+"', inconvenient = '"+ungeste.inconvenient
+				+"', explication = '"+ungeste.explication
+				+"', niveau_difficulte = '"+ungeste.difficulte
+				+"', valeur = '"+ungeste.valeur
+				+"', id_video = '"+ungeste.idvideo
+				+"' WHERE id_geste = "+ungeste.idGeste+"");
+		
+		statement.executeUpdate();
+		
+		
+	}
+	
+	public void supprGeste() throws SQLException // permet de supprimer un geste de la base
+	{
+		nouvelleConnexion("DELETE FROM geste_technique WHERE id_geste =  '"+ungeste.idGeste+"'");
 	}
 	
 	

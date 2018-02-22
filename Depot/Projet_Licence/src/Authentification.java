@@ -11,14 +11,17 @@ import javax.swing.JTextField;
 
 class Authentification implements ActionListener {
 												
-//Objet pour se connecter Ã  la base de données
+//Objet pour se connecter à la base de données
 public Base b = new Base();
 public Connection conn;
 private InterfaceConnexion IC;
 
+public Geste classGeste;
+
+
 static JTextField user, mdp;
 
-//Objet PreparedStatement
+	//Objet PreparedStatement
     PreparedStatement statement = null;
     //Objet ResultSet
     ResultSet resultat = null;
@@ -42,10 +45,12 @@ try {
 //Création de la requète
 	statement = conn.prepareStatement("SELECT nom_utilisateur, prenom_utilisateur FROM utilisateurs WHERE login_utilisateur = '"+login+"' And mdp_utilisateur ='"+password+"'");
 																					
-	System.out.println(statement); //Ã  supprimer
+	System.out.println(statement); //à  supprimer
 
 																					
 	resultat = statement.executeQuery();
+	
+	System.out.println(resultat); //à  supprimer
 
 if(resultat.next())
 {
@@ -54,9 +59,20 @@ JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.
 else {
 JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 }
+	classGeste = new Geste();
 
-//RÃ©cupÃ©ration de la requÃªte dans une variable
-resultat = statement.executeQuery();
+	classGeste.getNomGeste(); // recupère la liste de tous les nom geste pour la liste déroulante
+
+	classGeste.recupGeste("tirer"); // récupération des données du geste "tirer" de la base
+	
+	classGeste.ungeste.difficulte = 3; // test de la modification du niveau de difficulté
+	classGeste.ungeste.nomGeste = "pointer"; // test de la modification du nom du geste
+	
+	classGeste.modifGeste(); // enregistre les modifications si dessus
+
+	classGeste.recupGeste("tirer"); // recharge les données, pour l'actualisation
+
+
 
 conn.close();
 }
