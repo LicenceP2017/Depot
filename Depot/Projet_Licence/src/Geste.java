@@ -28,11 +28,11 @@ public class Geste {
 	public Base b = new Base();
 	public Connection conn;
     PreparedStatement statement = null;	//Objet PreparedStatement
-    ResultSet resultat = null;     //Objet ResultSet
+    ResultSet resultat = null;    //Objet ResultSet
 	
     
     private void nouvelleConnexion(String sql) throws SQLException // creer la connexion base et execute la requete passé en paramètre
-    {
+    {    	
     	b.ConnexionBD();
         conn = b.getConnect();
 		statement = conn.prepareStatement(sql);
@@ -53,9 +53,6 @@ public class Geste {
 		difficulte = dif;
 		valeur = val;
 		idvideo = vi;
-		motCle = new ArrayList<>();
-		images = new ArrayList<>();
-		categories = new ArrayList<>();
 	}
 	
 	
@@ -96,6 +93,33 @@ public class Geste {
 			
 		}
 		
+		nouvelleConnexion("SELECT nom_motcle FROM mot_cle AS m INNER JOIN correspond AS c ON m.id_motcle = c.id_motcle WHERE id_geste = "+ungeste.idGeste+"");
+		resultat = statement.executeQuery();
+
+		while(resultat.next()){ 
+			String nom = resultat.getString("nom_motcle");
+			motCle = new ArrayList<>();
+			motCle.add(nom);
+		}
+		
+		nouvelleConnexion("SELECT nom_image FROM image AS i INNER JOIN illustre AS g ON i.id_image = g.id_image WHERE id_geste = '"+ungeste.idGeste+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			String nom = resultat.getString("nom_image");
+			images = new ArrayList<>();
+			images.add(nom);
+		}
+		
+		nouvelleConnexion("SELECT nom_categorie FROM categorie AS c INNER JOIN possede AS g ON c.id_categorie = g.id_categorie WHERE id_geste = '"+ungeste.idGeste+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			String nom = resultat.getString("nom_categorie");
+			categories = new ArrayList<>();
+			categories.add(nom);
+		}
+		
 		System.out.println(ungeste.idGeste);
 		System.out.println(ungeste.nomGeste);
 		System.out.println(ungeste.avantage);
@@ -127,6 +151,8 @@ public class Geste {
 	{
 		nouvelleConnexion("DELETE FROM geste_technique WHERE id_geste =  '"+ungeste.idGeste+"'");
 	}
+	
+	
 	
 	
 

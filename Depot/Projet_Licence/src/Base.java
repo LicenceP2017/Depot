@@ -1,4 +1,3 @@
-import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -26,7 +25,6 @@ try
 																					
 	
 	conn = DriverManager.getConnection(url, user, passwd);
-	out.println("Ca fonctionne");
 }
 catch(Exception ex)
 {

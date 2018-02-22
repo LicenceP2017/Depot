@@ -66,7 +66,7 @@ JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 	classGeste.recupGeste("tirer"); // récupération des données du geste "tirer" de la base
 	
 	classGeste.ungeste.difficulte = 3; // test de la modification du niveau de difficulté
-	classGeste.ungeste.nomGeste = "pointer"; // test de la modification du nom du geste
+	// lorsqu'on modifira le nom, tester s'il existe deja !!!!!!!
 	
 	classGeste.modifGeste(); // enregistre les modifications si dessus
 
