@@ -54,14 +54,10 @@ JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.
 else {
 JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 }
-classGeste = new Geste();
+	classGeste = new Geste();
 
-
-
-
-
-
-conn.close();
+	
+	conn.close();
 }
 catch (SQLException e) {
 System.out.println(e.getMessage());

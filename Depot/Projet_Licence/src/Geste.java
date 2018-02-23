@@ -18,11 +18,19 @@ public class Geste {
 		modifGeste() : enregistre les changement sur l'objet geste dans la classe              Attention : créer un test pour le nom du geste
 		nouveauGeste(..) : enregistre un nouveau geste dans la base, ne prend pas d'id, auto increment dans la base
 		supprGeste() : supprime le geste actuellement chargé
-		recupIdGeste(String nom) : récupere l'id du geste technique du nom passé en paramètre
 		nouveauMotCle(String m) : créer un nouveau mot clé
-		lieMotCleEtGeste(String m, int id) : insere dans la table correspond l'id du geste et du mot clé, prend en parametre le mot clé et l'id du geste associé
-		
-	
+		nouvelleCategorie(String m) : créer nouvelle catégorie
+		nouvelleImage(String m) : créer nouvelle image
+		lieMotCleEtGeste(String mot, String gest) : insere dans la table correspond l'id du geste et du mot clé, prend en parametre le mot clé et le nom du geste associé
+		lieCategorieEtGeste(String cat, String gest )
+		lieImageEtGeste(String im, String gest)
+		retIdGeste(String nom) : retourne l'id du nom du geste passé en param
+		retIdCategorie(String nom) //
+		retIdMotCle(String nom) //
+		retIdImage(String nom) //
+		existMotCle(String m)  boolean qui retourne true si le nom passé en param existe déja
+		existCategorie(String m)
+		existImage(String m)
 	*/
 	
 	int idGeste;
@@ -138,15 +146,6 @@ public class Geste {
 			categories.add(nom);
 		}
 		
-		System.out.println(ungeste.idGeste);
-		System.out.println(ungeste.nomGeste);
-		System.out.println(ungeste.avantage);
-		System.out.println(ungeste.inconvenient);
-		System.out.println(ungeste.explication);
-		System.out.println(ungeste.difficulte);
-		System.out.println(ungeste.valeur);
-		System.out.println(ungeste.idvideo);
-		
 	}
 	
 	public void modifGeste() throws SQLException // permet de modifier un geste dans la base
@@ -187,27 +186,152 @@ public class Geste {
 		statement.executeUpdate();
 	}
 	
-	public int recupIdGeste(String nom) throws SQLException
+	
+	
+	
+	public void nouveauMotCle(String m) throws SQLException
+	{
+		if(existMotCle(m) == true)	{	JOptionPane.showMessageDialog(null,"mot cle deja existant ","Probleme",JOptionPane.PLAIN_MESSAGE);	}
+		else {
+			nouvelleConnexion("INSERT INTO mot_cle (`nom_motcle`) VALUES ('"+m+"')");
+			statement.executeUpdate();
+		}
+	}
+	
+	
+	
+	public void nouvelleCategorie(String m) throws SQLException
+	{
+		if(existCategorie(m) == true) {		JOptionPane.showMessageDialog(null,"Categorie deja existante ","Probleme",JOptionPane.PLAIN_MESSAGE); }
+		
+		else {
+			nouvelleConnexion("INSERT INTO categorie (`nom_categorie`) VALUES ('"+m+"')");
+			statement.executeUpdate();
+		}
+	}
+	
+	public void nouvelleImage(String m) throws SQLException
+	{
+		if(existImage(m) == true) {		JOptionPane.showMessageDialog(null,"Image deja existante ","Probleme",JOptionPane.PLAIN_MESSAGE); }
+		
+		else {
+			nouvelleConnexion("INSERT INTO image (`nom_image`) VALUES ('"+m+"')");
+			statement.executeUpdate();
+		}
+	}
+	
+	
+	
+	//////////////////////////////////////////////////////////////////  crée les liens avec les autres tables
+	
+	
+	public void lieMotCleEtGeste(String mot, String gest) throws SQLException // prend en parametre le mot clé et le geste à associer
+	{ // permet de faire le lien entre le motcle et le geste dans la table correspond
+		
+		
+		int motCle = retIdMotCle(mot);
+		int geste = retIdGeste(gest);
+		if(motCle != 0 && geste != 0)
+		{
+			nouvelleConnexion("INSERT INTO correspond (`id_motcle`, `id_geste`) VALUES ('"+motCle+"','"+geste+"')");
+			statement.executeUpdate();
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null,"Le lien entre "+mot+" et "+gest+" n'a pas abouti ","Probleme",JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	public void lieCategorieEtGeste(String cat, String gest ) throws SQLException // prend en parametre la categorie et le geste à associer
+	{ // permet de faire le lien entre la categorie et le geste dans la table possede
+		
+		int categorie = retIdCategorie(cat);
+		int geste = retIdGeste(gest);
+		if(categorie != 0 && geste != 0)
+		{
+			nouvelleConnexion("INSERT INTO possede (`id_categorie`, `id_geste`) VALUES ('"+categorie+"','"+geste+"')");
+			statement.executeUpdate();
+		}
+		else JOptionPane.showMessageDialog(null,"Le lien entre "+cat+" et "+gest+" n'a pas abouti ","Probleme",JOptionPane.PLAIN_MESSAGE);
+		
+	}
+	
+	
+	public void lieImageEtGeste(String im, String gest ) throws SQLException // prend en parametre le nom de l'image et le geste à associer
+	{ // permet de faire le lien entre l'image et le geste dans la table illustre
+		
+		int image = retIdImage(im);
+		int geste = retIdGeste(gest);
+		if(image != 0 && geste != 0)
+		{
+			nouvelleConnexion("INSERT INTO illustre (`id_geste`, `id_image`) VALUES ('"+geste+"','"+image+"')");
+			statement.executeUpdate();
+		}
+		else JOptionPane.showMessageDialog(null,"Le lien entre "+im+" et "+gest+" n'a pas abouti ","Probleme",JOptionPane.PLAIN_MESSAGE);
+		
+	}
+	//////////////////////////////////////////////////////////////////// retourne les id en fonction des noms
+	public int retIdGeste(String nom) throws SQLException
 	{
 		int res = 0;
-		
 		nouvelleConnexion("SELECT id_geste FROM geste_technique WHERE nom_geste = '"+nom+"'");
 		resultat = statement.executeQuery();
 		
 		while(resultat.next()){ 
 			res = resultat.getInt("id_geste");
 		}
-		if(res == 0) {
+		if(res == 0) {	JOptionPane.showMessageDialog(null,"Nom du geste technique introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);	}
 		
-			JOptionPane.showMessageDialog(null,"Nom du geste technique introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);
-		}
 		return res;
 		
 	}
 	
-	
-	public void nouveauMotCle(String m) throws SQLException
+	public int retIdCategorie(String nom) throws SQLException
 	{
+		int res = 0;
+		nouvelleConnexion("SELECT id_categorie FROM categorie WHERE nom_categorie = '"+nom+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			res = resultat.getInt("id_categorie");
+		}
+		if(res == 0) {	JOptionPane.showMessageDialog(null,"Nom de la categorie introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);	}
+		
+		return res;
+	}
+	
+	public int retIdMotCle(String nom) throws SQLException
+	{
+		int res = 0;
+		nouvelleConnexion("SELECT id_motcle FROM mot_cle WHERE nom_motcle = '"+nom+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			res = resultat.getInt("id_motcle");
+		}
+		if(res == 0) {	JOptionPane.showMessageDialog(null,"Nom du mot Cle introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);	}
+		
+		return res;
+	}
+	
+	public int retIdImage(String nom) throws SQLException
+	{
+		int res = 0;
+		nouvelleConnexion("SELECT id_image FROM image WHERE nom_image = '"+nom+"'");
+		resultat = statement.executeQuery();
+		
+		while(resultat.next()){ 
+			res = resultat.getInt("id_image");
+		}
+		if(res == 0) {	JOptionPane.showMessageDialog(null,"Nom de l'image introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);	}
+		
+		return res;
+	}
+	
+	//////////////////////////////////////////////////////////////  test des duplicatas
+	public boolean existMotCle(String m) throws SQLException
+	{
+		boolean test = false;
 		ArrayList<String> toutLesMotsCle = new ArrayList<>();
 		
 		nouvelleConnexion("SELECT nom_motcle FROM mot_cle");
@@ -219,38 +343,15 @@ public class Geste {
 		}
 		
 		if(toutLesMotsCle.contains(m)) {
-			JOptionPane.showMessageDialog(null,"mot cle deja existant ","Probleme",JOptionPane.PLAIN_MESSAGE);
+			test = true;
 		}
-		else {
-			nouvelleConnexion("INSERT INTO mot_cle (`nom_motcle`) VALUES ('"+m+"')");
-			statement.executeUpdate();
-		}
+		return test;
 	}
 	
-	public void lieMotCleEtGeste(String m, int id) throws SQLException // prend en parametre le mot clé et l'id du geste associé
-	{ // permet de faire le lien entre le motcle et le geste dans la table correspond
-		
-		int res = 0;
-		
-		nouvelleConnexion("SELECT id_motcle FROM mot_cle WHERE nom_motcle = '"+m+"'");
-		resultat = statement.executeQuery();
-		
-		while(resultat.next()){ 
-			res = resultat.getInt("id_motcle");
-		}
-		if(res != 0)
-		{
-			nouvelleConnexion("INSERT INTO correspond (`id_motcle`, `id_geste`) VALUES ('"+res+"','"+m+"')");
-			statement.executeUpdate();
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(null,"identifiants du mot Cle introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);
-		}
-	}
-	
-	public void nouvelleCategorie(String m) throws SQLException
+	public boolean existCategorie(String m) throws SQLException
 	{
+		boolean test = false;
+		
 		ArrayList<String> toutesLesCategories = new ArrayList<>();
 		
 		nouvelleConnexion("SELECT nom_categorie FROM categorie");
@@ -262,34 +363,29 @@ public class Geste {
 		}
 		
 		if(toutesLesCategories.contains(m)) {
-			JOptionPane.showMessageDialog(null,"Categorie deja existante ","Probleme",JOptionPane.PLAIN_MESSAGE);
+			test = true;
 		}
-		else {
-			nouvelleConnexion("INSERT INTO categorie (`nom_categorie`) VALUES ('"+m+"')");
-			statement.executeUpdate();
-		}
+		return test;
 	}
 	
-	public void lieCategorieEtGeste(String m, int id) throws SQLException // prend en parametre la categorie et l'id du geste associé
-	{ // permet de faire le lien entre la categorie et le geste dans la table possede
+	public boolean existImage(String m) throws SQLException
+	{
+		boolean test = false;
 		
-		int res = 0;
+		ArrayList<String> toutesLesImages = new ArrayList<>();
 		
-		nouvelleConnexion("SELECT id_categorie FROM categorie WHERE nom_categorie = '"+m+"'");
+		nouvelleConnexion("SELECT nom_image FROM image");
 		resultat = statement.executeQuery();
 		
 		while(resultat.next()){ 
-			res = resultat.getInt("id_categorie");
+			String nom = resultat.getString("nom_image");
+			toutesLesImages.add(nom);
 		}
-		if(res != 0)
-		{
-			nouvelleConnexion("INSERT INTO possede (`id_categorie`, `id_geste`) VALUES ('"+res+"','"+m+"')");
-			statement.executeUpdate();
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(null,"identifiants du mot Cle introuvable ","Probleme",JOptionPane.PLAIN_MESSAGE);
-		}
+		
+		if(toutesLesImages.contains(m)) {
+			test = true;
+		}		
+		return test;
 	}
 	
 	
