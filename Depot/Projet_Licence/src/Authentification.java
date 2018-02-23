@@ -44,13 +44,8 @@ public void actionPerformed(ActionEvent ae)
 try {
 //Création de la requète
 	statement = conn.prepareStatement("SELECT nom_utilisateur, prenom_utilisateur FROM utilisateurs WHERE login_utilisateur = '"+login+"' And mdp_utilisateur ='"+password+"'");
-																					
-	System.out.println(statement); //à  supprimer
-
-																					
+																																						
 	resultat = statement.executeQuery();
-	
-	System.out.println(resultat); //à  supprimer
 
 if(resultat.next())
 {
@@ -59,18 +54,10 @@ JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.
 else {
 JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 }
-	classGeste = new Geste();
+classGeste = new Geste();
 
-	classGeste.getNomGeste(); // recupère la liste de tous les nom geste pour la liste déroulante
 
-	classGeste.recupGeste("tirer"); // récupération des données du geste "tirer" de la base
-	
-	classGeste.ungeste.difficulte = 3; // test de la modification du niveau de difficulté
-	// lorsqu'on modifira le nom, tester s'il existe deja !!!!!!!
-	
-	classGeste.modifGeste(); // enregistre les modifications si dessus
 
-	classGeste.recupGeste("tirer"); // recharge les données, pour l'actualisation
 
 
 

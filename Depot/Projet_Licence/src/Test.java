@@ -1,5 +1,3 @@
-import testPro.ajouter;
-
 public class Test {
 
 	public Test() {
