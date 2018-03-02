@@ -1,3 +1,5 @@
+import java.awt.EventQueue;
+
 public class Test {
 
 	public Test() {
@@ -14,10 +16,18 @@ public class Test {
 		ic.setTitle("Logiciel de Formation");
 		ic.setVisible(true);
 		
-		// TODO Instancier une JFrame
-		ajouter fenetreAjout = new ajouter();
-		// TODO Afficher la JFrame
-		fenetreAjout.setVisible(true);
+
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ajouter frame = new ajouter();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 }
