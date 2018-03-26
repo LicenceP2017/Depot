@@ -17,7 +17,7 @@ public class Test {
 		ic.setVisible(true);
 		
 
-		
+		/*
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -28,6 +28,7 @@ public class Test {
 				}
 			}
 		});
+		*/
 	}
 
 }
