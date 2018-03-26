@@ -43,7 +43,7 @@ public void actionPerformed(ActionEvent ae)
 //Manipulation
 try {
 //Création de la requète
-	statement = conn.prepareStatement("SELECT nom_utilisateur, prenom_utilisateur FROM utilisateurs WHERE login_utilisateur = '"+login+"' And mdp_utilisateur ='"+password+"'");
+	statement = conn.prepareStatement("SELECT nom_utilisateur, prenom_utilisateur, droit_admin FROM utilisateurs WHERE login_utilisateur = '"+login+"' And mdp_utilisateur ='"+password+"'");
 																																						
 	resultat = statement.executeQuery();
 
