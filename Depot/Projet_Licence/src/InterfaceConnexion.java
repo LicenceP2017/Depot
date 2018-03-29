@@ -16,9 +16,9 @@ JPanel panelHaut, panelBas, panelGauche, panelDroite, panelCentre, panelConnexio
 JLabel user = new JLabel("Login");
 JLabel mdp = new JLabel("Mot de passe");
 JButton valider = new JButton("Valider");
-JButton annuler = new JButton("Annuler");
+//JButton annuler = new JButton("Annuler");
 JTextField user_txt = new JTextField();
-JTextField mdp_txt = new JTextField();
+JPasswordField mdp_txt = new JPasswordField();
 
 //static JTextField user, mdp;
 
@@ -28,6 +28,7 @@ public String returnUSER()
 	return user_txt.getText();
 }
 
+@SuppressWarnings("deprecation")
 public String returnMDP()
 {
 	return mdp_txt.getText();
@@ -41,7 +42,6 @@ super();
 this.setSize (new Dimension (600,400));
 //On ne pourra pas agrandir la fenetre intitulée.
 this.setResizable (false);
-this.setDefaultCloseOperation(EXIT_ON_CLOSE); // a enelever apres car sinon ferme tout le programme en ferant la fenetre de connexion
 
 /*Récupération du ContentPane*/
 Container contenu = this.getContentPane();
@@ -70,7 +70,7 @@ panelConnexion = new JPanel();
     panelCentre.add(mdp_txt);
     panelCentre.add(valider);
         valider.addActionListener(new Authentification(this));
-    panelCentre.add(annuler);
+    //panelCentre.add(annuler);
     
     /*Ajout du texte de panelConnexion*/
     panelConnexion.add(new JLabel ("CONNEXION"));
@@ -78,27 +78,4 @@ panelConnexion = new JPanel();
 
 }
 
-
-/*
-class ValiderListener extends JFrame implements ActionListener {
-
-private static final long serialVersionUID = 1L;
-
-@Override
-public void actionPerformed(ActionEvent e) {
-try {
-
-ActionEvent a = null;
-
-Authentification au = new Authentification();
-
-au.actionPerformed(a);		
-}
-catch (Exception ex) {
-ex.printStackTrace();
-}
-}
-}
-
-*/
 

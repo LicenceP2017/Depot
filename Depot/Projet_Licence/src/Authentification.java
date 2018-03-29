@@ -49,12 +49,20 @@ try {
 
 if(resultat.next())
 {
-JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.PLAIN_MESSAGE);
+	//JOptionPane.showMessageDialog(null,"Connexion réussie ! ","Success",JOptionPane.PLAIN_MESSAGE);
+	
+	User unUser = new User();
+	unUser.setNom(resultat.getString("nom_utilisateur"));
+	unUser.setPrenom(resultat.getString("prenom_utilisateur"));
+	unUser.setDroit(resultat.getInt("droit_admin"));
+	
+	InterfaceVideo  iv = new InterfaceVideo(unUser);
+		iv.setTitle("Bienvenue " + unUser.getNom() + " " + unUser.getPrenom());
+		iv.setVisible(true);
 }
 else {
-JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
+	JOptionPane.showMessageDialog(null,"Identifiants incorects! ","Error",1);
 }
-	classGeste = new Geste();
 
 	
 	conn.close();
